@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <malloc.h>
 
-#define def_tostr(d) #d
-
 void welcome(char *task_name, char *description)
 {
     red_print(task_name);
@@ -96,47 +94,47 @@ int scan_variant(char *message, char *variants[], int length)
     }
 }
 
-void scan_array(int* array, int length)
+void scan_array(int *array, int length)
 {
-    for(int i = 0; i < length; ++i)
+    for (int i = 0; i < length; ++i)
         array[i] = scan_int("");
 }
 
-void scan_matrix(int** matrix, int M, int N)
+void scan_matrix(int **matrix, int M, int N)
 {
-    for(int i = 0; i < M; ++i)
+    for (int i = 0; i < M; ++i)
         scan_array(matrix[i], N);
 }
 
-void scan_matrix(int M, int N, int matrix[M][N])
+void scan_matrix_s(int M, int N, int matrix[M][N])
 {
-    for(int i = 0; i < M; ++i)
+    for (int i = 0; i < M; ++i)
         scan_array(matrix[i], N);
 }
 
 // * ///////////////
 
-int* new_array(int length)
+int *new_array(int length)
 {
-    return (int*)calloc(length, sizeof(int));
+    return (int *)calloc(length, sizeof(int));
 }
 
-int* resize_array(int* array, int new_length)
+int *resize_array(int *array, int new_length)
 {
-    return (int*)realloc(array, new_length);
+    return (int *)realloc(array, new_length);
 }
 
-int *new_matrix(int M, int N)
+int **new_matrix(int M, int N)
 {
-    int** matrix = (int**)malloc(M*sizeof(int*));
-    for(int i = 0; i < M; ++i)
+    int **matrix = (int **)malloc(M * sizeof(int *));
+    for (int i = 0; i < M; ++i)
         matrix[i] = new_array(N);
     return matrix;
 }
 
-void free_matrix(int** matrix, int M)
+void free_matrix(int **matrix, int M)
 {
-    for(int i = 0; i < M; ++i)
+    for (int i = 0; i < M; ++i)
         free(matrix[i]);
     free(matrix);
 }
@@ -154,13 +152,19 @@ void print_array(int *array, int length)
 void print_matrix(int **matrix, int M, int N)
 {
     for (int i = 0; i < M; ++i)
+    {
+        printf("\n");
         print_array(matrix[i], N);
+    }
 }
 
 void print_matrix_s(int M, int N, int matrix[M][N])
 {
     for (int i = 0; i < M; ++i)
+    {
+        printf("\n");
         print_array(matrix[i], N);
+    }
 }
 
 // * ///////////////
@@ -208,82 +212,76 @@ void randomize_matrix_s(int M, int N, int matrix[M][N], int min, int max)
 
 void input_array(int *array, int length)
 {
-    const v = scan_variant("Вариант заполнения: ", 
-        (char*[])
-        {
-            "заполнение случайными числами " def_tostr(default_min) "-" def_tostr(default_max),
-            "заполнение случайными числами в заданном интервале",
-            "ручной ввод"
-        }
-        , 3);
+    const v = scan_variant("Вариант заполнения: ",
+                           (char *[]){
+                               "заполнение случайными числами [10,99]",
+                               "заполнение случайными числами в заданном интервале",
+                               "ручной ввод"},
+                           3);
 
-    switch(v)
+    switch (v)
     {
-        case 0:
-            randomize_array(array, length, default_min, default_max);
-            break;
-        case 1:
-            int min = scan_int("Минимум: ");
-            int max = scan_int_limit("Максимум", min, __INT_MAX__);
-            randomize_array(array, length, min, max);
-            break;
-        case 2:
-            scan_array(array, length);
-            break;
+    case 0:
+        randomize_array(array, length, default_min, default_max);
+        break;
+    case 1:
+        int min = scan_int("Минимум: ");
+        int max = scan_int_limit("Максимум", min, __INT_MAX__);
+        randomize_array(array, length, min, max);
+        break;
+    case 2:
+        scan_array(array, length);
+        break;
     }
 }
 
 void input_matrix(int **matrix, int M, int N)
 {
-    const v = scan_variant("Вариант заполнения: ", 
-        (char*[])
-        {
-            "заполнение случайными числами " def_tostr(default_min) "-" def_tostr(default_max),
-            "заполнение случайными числами в заданном интервале",
-            "ручной ввод"
-        }
-        , 3);
+    int v = scan_variant("Вариант заполнения: ",
+                         (char *[]){
+                             "заполнение случайными числами [10,99]",
+                             "заполнение случайными числами в заданном интервале",
+                             "ручной ввод"},
+                         3);
 
-    switch(v)
+    switch (v)
     {
-        case 0:
-            randomize_matrix(matrix, M, N, default_min, default_max);
-            break;
-        case 1:
-            int min = scan_int("Минимум: ");
-            int max = scan_int_limit("Максимум", min, __INT_MAX__);
-            randomize_matrix(matrix, M, N, min, max);
-            break;
-        case 2:
-            scan_matrix(matrix, M, N);
-            break;
+    case 0:
+        randomize_matrix(matrix, M, N, default_min, default_max);
+        break;
+    case 1:
+        int min = scan_int("Минимум: ");
+        int max = scan_int_limit("Максимум", min, __INT_MAX__);
+        randomize_matrix(matrix, M, N, min, max);
+        break;
+    case 2:
+        scan_matrix(matrix, M, N);
+        break;
     }
 }
 
 void input_matrix_s(int M, int N, int matrix[M][N])
 {
-    const v = scan_variant("Вариант заполнения: ", 
-        (char*[])
-        {
-            "заполнение случайными числами " def_tostr(default_min) "-" def_tostr(default_max),
-            "заполнение случайными числами в заданном интервале",
-            "ручной ввод"
-        }
-        , 3);
+    const v = scan_variant("Вариант заполнения: ",
+                           (char *[]){
+                               "заполнение случайными числами [10,99]",
+                               "заполнение случайными числами в заданном интервале",
+                               "ручной ввод"},
+                           3);
 
-    switch(v)
+    switch (v)
     {
-        case 0:
-            randomize_matrix_s( M, N,matrix, default_min, default_max);
-            break;
-        case 1:
-            int min = scan_int("Минимум: ");
-            int max = scan_int_limit("Максимум", min, __INT_MAX__);
-            randomize_matrix_s(M, N, matrix, min, max);
-            break;
-        case 2:
-            scan_matrix_s(M, N, matrix);
-            break;
+    case 0:
+        randomize_matrix_s(M, N, matrix, default_min, default_max);
+        break;
+    case 1:
+        int min = scan_int("Минимум: ");
+        int max = scan_int_limit("Максимум", min, __INT_MAX__);
+        randomize_matrix_s(M, N, matrix, min, max);
+        break;
+    case 2:
+        scan_matrix_s(M, N, matrix);
+        break;
     }
 }
 

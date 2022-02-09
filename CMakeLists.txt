@@ -6,6 +6,7 @@ enable_testing()
 
 file(GLOB_RECURSE SRC_FILES
     "${CMAKE_CURRENT_LIST_DIR}/src/*.c"
+    "${CMAKE_CURRENT_LIST_DIR}/src/*.h"
 )
 
 add_executable(run ${SRC_FILES})
