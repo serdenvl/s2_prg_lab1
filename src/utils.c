@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+#define def_tostr(d) #d
+
 void welcome(char *task_name, char *description)
 {
     red_print(task_name);
@@ -8,16 +10,16 @@ void welcome(char *task_name, char *description)
     printf("\n");
 }
 
-int red_print(char* message)
+int red_print(char *message)
 {
     if (message[0] != '\n')
-            printf("\n");
-        printf(message);
+        printf("\n");
+    printf(message);
 }
 
 void localize()
 {
-    SetConsoleCP(65001);                
+    SetConsoleCP(65001);
     SetConsoleOutputCP(65001);
 }
 
@@ -46,6 +48,8 @@ int question(char *message)
     }
 }
 
+// * ///////////////
+
 int scan_int(char *message)
 {
     return scan_int_limit(message, -__INT_MAX__, __INT_MAX__);
@@ -57,11 +61,7 @@ int scan_int_limit(char *message, int min, int max)
     do
     {
         if (message != "")
-        {
-            if (message[0] != '\n')
-                printf("\n");
-            printf(message);
-        }
+            red_print(message);
         scanf("%d", &buff);
 
         if (buff < min)
@@ -71,6 +71,45 @@ int scan_int_limit(char *message, int min, int max)
     } while (buff < min || max < buff);
 
     return buff;
+}
+
+int scan_variant(char *message, char *variants[], int length)
+{
+    int buff;
+    while (1)
+    {
+        if (message != "")
+            red_print(message);
+        for (int i = 0; i < length; ++i)
+            printf("\n%d - %s", i, variants[i]);
+
+        printf("\n");
+        buff = scan_int("");
+        if (0 <= buff && buff < length)
+            return buff;
+
+        printf("Неверный ответ\n");
+        while (getchar() != '\n')
+            ;
+    }
+}
+
+void scan_array(int* array, int length)
+{
+    for(int i = 0; i < length; ++i)
+        array[i] = scan_int("");
+}
+
+void scan_matrix(int** matrix, int M, int N)
+{
+    for(int i = 0; i < M; ++i)
+        scan_array(matrix[i], N);
+}
+
+void scan_matrix(int M, int N, int matrix[M][N])
+{
+    for(int i = 0; i < M; ++i)
+        scan_array(matrix[i], N);
 }
 
 // * ///////////////
@@ -103,7 +142,7 @@ void zeromize_array(int *array, int length)
         array[i] = 0;
 }
 
-void zeromize_matrix(int** matrix, int M, int N, int min, int max)
+void zeromize_matrix(int **matrix, int M, int N, int min, int max)
 {
     for (int i = 0; i < M; ++i)
         zeromize_array(matrix[i], N);
@@ -121,7 +160,7 @@ void randomize_array(int *array, int length, int min, int max)
         array[i] = random(min, max);
 }
 
-void randomize_matrix(int** matrix, int M, int N, int min, int max)
+void randomize_matrix(int **matrix, int M, int N, int min, int max)
 {
     for (int i = 0; i < M; ++i)
         randomize_array(matrix[i], N, min, max);
@@ -133,6 +172,91 @@ void randomize_matrix_s(int M, int N, int matrix[M][N], int min, int max)
         randomize_array(matrix[i], N, min, max);
 }
 
+// * ///////////////
+
+#define default_min 10
+#define default_max 99
+
+void input_array(int *array, int length)
+{
+    const v = scan_variant("Вариант заполнения: ", 
+        (char*[])
+        {
+            "заполнение случайными числами " def_tostr(default_min) "-" def_tostr(default_max),
+            "заполнение случайными числами в заданном интервале",
+            "ручной ввод"
+        }
+        , 3);
+
+    switch(v)
+    {
+        case 0:
+            randomize_array(array, length, default_min, default_max);
+            break;
+        case 1:
+            int min = scan_int("Минимум: ");
+            int max = scan_int_limit("Максимум", min, __INT_MAX__);
+            randomize_array(array, length, min, max);
+            break;
+        case 2:
+            scan_array(array, length);
+            break;
+    }
+}
+
+void input_matrix(int **matrix, int M, int N)
+{
+    const v = scan_variant("Вариант заполнения: ", 
+        (char*[])
+        {
+            "заполнение случайными числами " def_tostr(default_min) "-" def_tostr(default_max),
+            "заполнение случайными числами в заданном интервале",
+            "ручной ввод"
+        }
+        , 3);
+
+    switch(v)
+    {
+        case 0:
+            randomize_matrix(matrix, M, N, default_min, default_max);
+            break;
+        case 1:
+            int min = scan_int("Минимум: ");
+            int max = scan_int_limit("Максимум", min, __INT_MAX__);
+            randomize_matrix(matrix, M, N, min, max);
+            break;
+        case 2:
+            scan_matrix(matrix, M, N);
+            break;
+    }
+}
+
+void input_matrix_s(int M, int N, int matrix[M][N])
+{
+    const v = scan_variant("Вариант заполнения: ", 
+        (char*[])
+        {
+            "заполнение случайными числами " def_tostr(default_min) "-" def_tostr(default_max),
+            "заполнение случайными числами в заданном интервале",
+            "ручной ввод"
+        }
+        , 3);
+
+    switch(v)
+    {
+        case 0:
+            randomize_matrix_s( M, N,matrix, default_min, default_max);
+            break;
+        case 1:
+            int min = scan_int("Минимум: ");
+            int max = scan_int_limit("Максимум", min, __INT_MAX__);
+            randomize_matrix_s(M, N, matrix, min, max);
+            break;
+        case 2:
+            scan_matrix_s(M, N, matrix);
+            break;
+    }
+}
 
 // * ///////////////
 
