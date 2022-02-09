@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <malloc.h>
 
 #define def_tostr(d) #d
 
@@ -110,6 +112,33 @@ void scan_matrix(int M, int N, int matrix[M][N])
 {
     for(int i = 0; i < M; ++i)
         scan_array(matrix[i], N);
+}
+
+// * ///////////////
+
+int* new_array(int length)
+{
+    return (int*)calloc(length, sizeof(int));
+}
+
+int* resize_array(int* array, int new_length)
+{
+    return (int*)realloc(array, new_length);
+}
+
+int *new_matrix(int M, int N)
+{
+    int** matrix = (int**)malloc(M*sizeof(int*));
+    for(int i = 0; i < M; ++i)
+        matrix[i] = new_array(N);
+    return matrix;
+}
+
+void free_matrix(int** matrix, int M)
+{
+    for(int i = 0; i < M; ++i)
+        free(matrix[i]);
+    free(matrix);
 }
 
 // * ///////////////
