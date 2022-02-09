@@ -79,7 +79,6 @@ int main()
     int M = scan_int("M: ");
     int N = scan_int("N: ");
     int** matrix = new_matrix(M, N);
-    printf("%d", matrix[0][0]);
     input_matrix(matrix, M, N);
 
     printf("Матрица: ");
