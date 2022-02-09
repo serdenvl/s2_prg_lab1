@@ -251,7 +251,7 @@ void input_matrix(int **matrix, int M, int N)
         break;
     case 1:
         int min = scan_int("Минимум: ");
-        int max = scan_int_limit("Максимум", min, __INT_MAX__);
+        int max = scan_int_limit("Максимум: ", min, __INT_MAX__);
         randomize_matrix(matrix, M, N, min, max);
         break;
     case 2:
