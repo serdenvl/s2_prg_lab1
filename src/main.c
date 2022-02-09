@@ -2,17 +2,6 @@
 #include <stdlib.h>
 #include "utils.h"
 
-/*
-    *place_for_task*
-*/
-
-#define task_name "lab #1"
-#define welcome_message "\
-Дана матрица MxN. \n\
-Вывести количество строк, схожих с первой. \n\
-Строки похожи, если множества их элементов эквивалентны. \n\
-"
-
 int* to_setlike(int* array, int length)
 {
     int* s_array = new_array(length+1);
@@ -69,6 +58,18 @@ int num_similar_string(int** matrix, int M, int N)
 
     return count;
 }
+
+
+/*
+    *place_for_task*
+*/
+
+#define task_name "lab #1"
+#define welcome_message "\
+Дана матрица MxN. \n\
+Вывести количество строк, схожих с первой. \n\
+Строки похожи, если множества их элементов эквивалентны. \n\
+"
 
 int main()
 {
