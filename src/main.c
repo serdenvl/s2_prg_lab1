@@ -6,8 +6,9 @@
 int* to_setlike(int* array, int length)
 {
     int* s_array = new_array(length+1);
-    s_array[0] = 1; // отводится под длину массива
+
     s_array[1] = array[0];
+    s_array[0] = 1; // отводится под длину
 
     for(int i = 1; i < length; ++i)
     {
